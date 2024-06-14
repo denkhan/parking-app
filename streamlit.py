@@ -2,6 +2,7 @@ import streamlit as st
 import base64
 import requests
 import os
+from PIL import Image
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -44,7 +45,7 @@ def encode_image(image_path):
         return base64.b64encode(image_file.read()).decode('utf-8')
     
 def encode_picture(image):
-        return base64.b64encode(image).decode('utf-8')
+    return base64.b64encode(image).decode('utf-8')
 
 def get_content(response):
     return response['choices'][0]['message']['content']
@@ -52,14 +53,16 @@ def get_content(response):
 
 tab1, tab2 = st.tabs(["File upload", "Camera"])
 
+
 with tab1:
     uploaded_file = st.file_uploader("Choose a file")
     if uploaded_file is not None:
-        st.write(uploaded_file.name)
-        file_name = "images/ingredients-list-from-lotion-showing-the-ingredient-ethylenediaminetetraacetic-BBRP2E.jpg"
-        encoded_image = encode_image(file_name)
-        print(encoded_image)
-        st.image(file_name, caption='Parkeringsskylt')
+        encoded_image = encode_picture(uploaded_file.read())
+
+
+        st.image(Image.open(uploaded_file), caption="Parkeringsskylt", use_column_width=True)
+
+        # st.image(file_name, caption='Parkeringsskylt')
         res = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=get_payload(encoded_image))
 
         st.write(get_content(res.json()))
@@ -72,4 +75,3 @@ with tab2:
 
         st.write(get_content(res.json()))
 
-    
