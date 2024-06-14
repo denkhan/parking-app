@@ -22,7 +22,7 @@ def get_payload(image):
             "content": [
             {
                 "type": "text",
-                "text": "Det här är hudvårdsprodukt. Finns här några farliga ämnen?"
+                "text": "Det här är en svensk parkeringsskylt. När får jag parkera här?"
             },
             {
                 "type": "image_url",
